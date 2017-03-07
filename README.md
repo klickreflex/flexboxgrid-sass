@@ -1,3 +1,5 @@
+Just a fork of Flexbox Grid Sass that gets rid of the flex-sass dependency as I prefer to handle vendor prefixes with PostCSS.
+
 Flexbox Grid Sass
 ===========
 This work is an adaptation from the original [Flexbox Grid](http://flexboxgrid.com/) created by @kristoferjoseph.

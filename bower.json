@@ -22,8 +22,5 @@
     "test*",
     "tests*",
     "demo/"
-  ],
-  "dependencies": {
-    "sass-flex-mixin": "~1.0.1"
-  }
+  ]
 }
