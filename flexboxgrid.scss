@@ -1,7 +1,5 @@
-//
-// -- Start editing -- //
-//
-
+// Flexbox Grid Sass Adpatation, forked ot remove external dependency
+// Source: https://github.com/klickreflex/flexboxgrid-sass
 
 // Set the number of columns you want to use on your layout.
 $grid-columns: 12 !default;
@@ -12,11 +10,24 @@ $outer-margin: 2rem !default;
 // Create or remove breakpoints for your project
 // Syntax:
 // name SIZErem,
-$breakpoints:
-  sm 48em 46rem,
-  md 62em 61rem,
-  lg 75em 71rem !default;
+
+// Grid breakpoints
+$grid-sm: 48em !default;
+$grid-md: 64em !default;
+$grid-lg: 75em !default;
+
+$container-sm: 69rem !default;
+$container-md: 65rem !default;
+$container-lg: 76rem !default;
+
+$grid-breakpoints: (
+    ('sm', $grid-sm, $container-sm),
+    ('md', $grid-md, $container-md),
+    ('lg', $grid-lg, $container-lg)
+) !default;
+
 $flexboxgrid-max-width: 1200px !default;
+
 
 //
 // -- Stop editing -- //
@@ -26,190 +37,210 @@ $gutter-compensation: $gutter-width * .5 * -1;
 $half-gutter-width: $gutter-width * .5;
 
 .wrapper {
-  box-sizing: border-box;
-  max-width: $flexboxgrid-max-width;
-  margin: 0 auto;
+    box-sizing: border-box;
+    max-width: $flexboxgrid-max-width;
+    margin: 0 auto;
+}
+
+.container {
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .container-fluid {
-  margin-right: auto;
-  margin-left: auto;
-  padding-right: $outer-margin;
-  padding-left: $outer-margin;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: $outer-margin;
+    padding-left: $outer-margin;
 }
 
 .row {
-  box-sizing: border-box;
-  display: flex;
-  flex: 0 1 auto;
-  flex-direction: row;
-  flex-wrap: wrap;
-  margin-right: $gutter-compensation;
-  margin-left: $gutter-compensation;
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    margin-right: $gutter-compensation;
+    margin-left: $gutter-compensation;
+    flex: 0 1 auto;
+    flex-wrap: wrap;
 }
 
 .row.reverse {
-  flex-direction: row-reverse;
+    flex-direction: row-reverse;
 }
 
 .col.reverse {
-  flex-direction: column-reverse;
+    flex-direction: column-reverse;
 }
 
 @mixin flexboxgrid-sass-col-common {
-  box-sizing: border-box;
+    box-sizing: border-box;
+    // we leave @include flex-basis(auto) out of common because
+    // in some spots we need it and some we dont
+    // more why here: https://github.com/kristoferjoseph/flexboxgrid/issues/126
+    padding-right: $half-gutter-width;
+    padding-left: $half-gutter-width;
+    // split @include flex(0, 0, auto) into individual props
 
-  // split @include flex(0, 0, auto) into individual props
-  flex-grow: 0;
-  flex-shrink: 0;
-
-  // we leave @include flex-basis(auto) out of common because
-  // in some spots we need it and some we dont
-  // more why here: https://github.com/kristoferjoseph/flexboxgrid/issues/126
-
-  padding-right: $half-gutter-width;
-  padding-left: $half-gutter-width;
+    flex-grow: 0;
+    flex-shrink: 0;
 }
 
 $name: xs;
+
 .col-#{$name} {
-  @include flexboxgrid-sass-col-common;
-  flex-basis: auto;
-}
-@for $i from 1 through $grid-columns {
-  .col-#{$name}-#{$i} {
     @include flexboxgrid-sass-col-common;
-    flex-basis: 100% / $grid-columns * $i;
-    max-width: 100% / $grid-columns * $i;
-  }
+    flex-basis: auto;
 }
+
 @for $i from 1 through $grid-columns {
-  .col-#{$name}-offset-#{$i} {
-    @include flexboxgrid-sass-col-common;
-    margin-left: 100% / $grid-columns * $i;
-  }
+    .col-#{$name}-#{$i} {
+        max-width: 100% / $grid-columns * $i;
+
+        @include flexboxgrid-sass-col-common;
+        flex-basis: 100% / $grid-columns * $i;
+    }
 }
+
+@for $i from 1 through $grid-columns {
+    .col-#{$name}-offset-#{$i} {
+        margin-left: 100% / $grid-columns * $i;
+
+        @include flexboxgrid-sass-col-common;
+    }
+}
+
 .col-#{$name} {
-  flex-grow: 1;
-  flex-basis: 0;
-  max-width: 100%;
+    max-width: 100%;
+    flex-grow: 1;
+    flex-basis: 0;
 }
+
 .start-#{$name} {
-  justify-content: flex-start;
-  text-align: start;
+    text-align: start;
+    justify-content: flex-start;
 }
 
 .center-#{$name} {
-  justify-content: center;
-  text-align: center;
+    text-align: center;
+    justify-content: center;
 }
 
 .end-#{$name} {
-  justify-content: flex-end;
-  text-align: end;
+    text-align: end;
+    justify-content: flex-end;
 }
 
 .top-#{$name} {
-  align-items: flex-start;
+    align-items: flex-start;
 }
 
 .middle-#{$name} {
-  align-items: center;
+    align-items: center;
 }
 
 .bottom-#{$name} {
-  align-items: flex-end;
+    align-items: flex-end;
 }
 
 .around-#{$name} {
-  justify-content: space-around;
+    justify-content: space-around;
 }
 
 .between-#{$name} {
-  justify-content: space-between;
+    justify-content: space-between;
 }
 
 .first-#{$name} {
-  order: -1;
+    order: -1;
 }
 
 .last-#{$name} {
-  order: 1;
+    order: 1;
 }
 
 
-@each $breakpoint in $breakpoints {
-  $name: nth($breakpoint, 1);
-  $size: nth($breakpoint, 2);
-  $container: nth($breakpoint, 3);
-  @media only screen and (min-width: $size) {
-    .container {
-      width: $container;
-    }
+@each $b in $grid-breakpoints {
+    $name:      nth($b, 1);
+    $size:      nth($b, 2);
+    $container: nth($b, 3);
 
-    .col-#{$name} {
-      @include flexboxgrid-sass-col-common;
-      flex-basis: auto;
-    }
-    @for $i from 1 through $grid-columns {
-      .col-#{$name}-#{$i} {
-        @include flexboxgrid-sass-col-common;
-        flex-basis: 100% / $grid-columns * $i;
-        max-width: 100% / $grid-columns * $i;
-      }
-    }
-    @for $i from 1 through $grid-columns {
-      .col-#{$name}-offset-#{$i} {
-        @include flexboxgrid-sass-col-common;
-        margin-left: 100% / $grid-columns * $i
-      }
-    }
-    .col-#{$name} {
-      flex-grow: 1;
-      flex-basis: 0;
-      max-width: 100%;
-    }
-    .start-#{$name} {
-      justify-content: flex-start;
-      text-align: start;
-    }
 
-    .center-#{$name} {
-      justify-content: center;
-      text-align: center;
-    }
+    @media only screen and (min-width: $size) {
+        .container {
+            width: $container;
+        }
 
-    .end-#{$name} {
-      justify-content: flex-end;
-      text-align: end;
-    }
+        .col-#{$name} {
+            @include flexboxgrid-sass-col-common;
+            flex-basis: auto;
+        }
 
-    .top-#{$name} {
-      align-items: flex-start;
-    }
+        @for $i from 1 through $grid-columns {
+            .col-#{$name}-#{$i} {
+                max-width: 100% / $grid-columns * $i;
 
-    .middle-#{$name} {
-      align-items: center;
-    }
+                @include flexboxgrid-sass-col-common;
+                flex-basis: 100% / $grid-columns * $i;
+            }
+        }
 
-    .bottom-#{$name} {
-      align-items: flex-end;
-    }
+        @for $i from 1 through $grid-columns {
+            .col-#{$name}-offset-#{$i} {
+                margin-left: 100% / $grid-columns * $i;
 
-    .around-#{$name} {
-      justify-content: space-around;
-    }
+                @include flexboxgrid-sass-col-common;
+            }
+        }
 
-    .between-#{$name} {
-      justify-content: space-between;
-    }
+        .col-#{$name} {
+            max-width: 100%;
 
-    .first-#{$name} {
-      order: -1;
-    }
+            flex-grow: 1;
+            flex-basis: 0;
+        }
 
-    .last-#{$name} {
-      order: 1;
+        .start-#{$name} {
+            text-align: start;
+
+            justify-content: flex-start;
+        }
+
+        .center-#{$name} {
+            text-align: center;
+            justify-content: center;
+        }
+
+        .end-#{$name} {
+            text-align: end;
+            justify-content: flex-end;
+        }
+
+        .top-#{$name} {
+            align-items: flex-start;
+        }
+
+        .middle-#{$name} {
+            align-items: center;
+        }
+
+        .bottom-#{$name} {
+            align-items: flex-end;
+        }
+
+        .around-#{$name} {
+            justify-content: space-around;
+        }
+
+        .between-#{$name} {
+            justify-content: space-between;
+        }
+
+        .first-#{$name} {
+            order: -1;
+        }
+
+        .last-#{$name} {
+            order: 1;
+        }
     }
-  }
 }
